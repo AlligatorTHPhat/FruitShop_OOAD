@@ -1,0 +1,208 @@
+﻿@model IEnumerable<FruitShopG4P.Data.HoaDon>
+
+@{
+    Layout = null;
+    var tongTienDict = (Dictionary<int, decimal>)ViewBag.TongTienDict;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>Quản lý hóa đơn</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        /* Màu chủ đạo mới: Amber/Orange (#ff9800) */
+        :root {
+            --primary-color: #ff9800; /* Amber Medium (Chính) */
+            --primary-dark: #f57c00; /* Amber Dark (Tiêu đề, gradient đậm) */
+            --primary-light: #ffb74d; /* Amber Light (Gradient nhạt) */
+            --background-start: #fff3e0; /* Orange Lightest */
+            --background-end: #ffe0b2; /* Orange Lighter */
+            /* Giữ màu phụ cho các nút hành động (Info, Warning, Danger) */
+            --info-start: #29b6f6;
+            --info-end: #0288d1;
+            --warning-start: #ffb74d;
+            --warning-end: #f57c00;
+            --danger-start: #ef5350;
+            --danger-end: #d32f2f;
+        }
+
+        body {
+            /* Thay đổi gradient nền sang tông Cam/Vàng */
+            background: linear-gradient(120deg, var(--background-start), var(--background-end));
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+        }
+
+        .container-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            /* Màu tiêu đề: Amber Dark */
+            color: var(--primary-dark);
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .btn-create {
+            /* Nút Create: Amber Gradient */
+            background: linear-gradient(45deg, var(--primary-light), var(--primary-dark));
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-create:hover {
+                transform: translateY(-2px);
+                /* Box shadow dựa trên Primary Color */
+                box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+                color: white;
+            }
+
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+            .table thead th {
+                /* Header Table: Amber Gradient */
+                background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
+                color: white;
+                border: none;
+                padding: 15px;
+                font-weight: 600;
+            }
+
+            .table tbody td {
+                padding: 15px;
+                vertical-align: middle;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .table tbody tr:hover {
+                /* Background hover: Orange Lightest */
+                background-color: var(--background-start);
+                transform: scale(1.01);
+                transition: all 0.2s ease;
+            }
+
+        .btn-action {
+            margin: 0 2px;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .btn-info {
+            /* Info Button: Blue Gradient (Được giữ nguyên) */
+            background: linear-gradient(45deg, #81c784, #388e3c); /* Giữ màu xanh lá cây cho Details, hoặc đổi sang Xanh dương chuẩn nếu bạn muốn */
+            border: none;
+            color: white;
+        }
+
+        .btn-warning {
+            /* Warning Button: Orange Gradient (Được giữ nguyên) */
+            background: linear-gradient(45deg, #ffb74d, #f57c00);
+            border: none;
+            color: white;
+        }
+
+        .btn-danger {
+            /* Danger Button: Red Gradient (Được giữ nguyên) */
+            background: linear-gradient(45deg, #e57373, #c62828);
+            border: none;
+            color: white;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="container-box">
+            <a href="@Url.Action("IndexNhanVien", "Admin")" class="back-link">← Quay lại</a>
+
+            <h1>Quản trị hóa đơn</h1>
+            <form asp-action="Search" asp-controller="HoaDon" method="get" class="mb-3">
+                <div class="input-group" style="max-width:420px;">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Tìm theo Khách Hàng"
+                           name="query"
+                           value="@(ViewBag.Query ?? string.Empty)">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success" type="submit">
+                            <i class="fa fa-search"></i> Tìm
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ngày đặt</th>
+                            <th>Ngày giao</th>
+                            <th>Người nhận</th>
+                            <th>Địa chỉ</th>
+                            <th>Thanh toán</th>
+                            <th>Vận chuyển</th>
+                            <th>Phí VC</th>
+                            <th>Tổng tiền</th>
+                            <th>Ghi chú</th>
+                            <th>Khách Hàng</th>
+                            <th>Trạng thái</th>
+                            <th style="width: 220px; text-align: center;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.NgayDat.ToString("dd/MM/yyyy")</td>
+                                <td>@item.NgayGiao?.ToString("dd/MM/yyyy")</td>
+                                <td>@item.HoTenNguoiNhan</td>
+                                <td>@item.DiaChi</td>
+                                <td>@item.CachThanhToan</td>
+                                <td>@item.CachVanChuyen</td>
+                                <td>@item.PhiVanChuyen.ToString("N0")</td>
+                                <td>@tongTienDict[item.MaHd].ToString("N0")</td>
+                                <td>@item.GhiChu</td>
+                                <td>@item.MaKhNavigation?.MaKh</td>
+                                <td>@item.MaTrangThaiNavigation?.MaTrangThai</td>
+                                <td style="text-align: center; white-space: nowrap;">
+                                    <a href="@Url.Action("Details", "HoaDon", new { id = item.MaHd })" class="btn-action btn-info">Chi tiết</a>
+                                    <a href="@Url.Action("Edit", "HoaDon", new { id = item.MaHd })" class="btn-action btn-warning">Sửa</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

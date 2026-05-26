@@ -1,0 +1,134 @@
+﻿@model FruitShopG4P.Data.HangHoa
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<style>
+    body {
+        /* Green Background Gradient */
+        background: linear-gradient(120deg, #f1f8e9, #c5e1a5); /* Lightest Green/Lime */
+        font-family: 'Segoe UI', sans-serif;
+        padding: 40px;
+    }
+
+    .container-box {
+        background: #fff;
+        padding: 30px 40px;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    h4 {
+        font-weight: bold;
+        /* Title Color: Deep Green/Lime Green */
+        color: #689f38; /* Màu xanh lá cây đậm hơn cho tiêu đề */
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    dl.row {
+        margin-bottom: 0;
+    }
+
+    dt.col-sm-2 {
+        font-weight: 600;
+        color: #555;
+        /* Label Background: Lightest Lime */
+        background: #e6ee9c; /* Màu xanh chanh nhạt */
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 5px;
+    }
+
+    dd.col-sm-10 {
+        color: #666;
+        padding: 10px;
+        margin-bottom: 5px;
+        /* Value Background: Light Gray/Near White */
+        background: #f5f5f5;
+        border-radius: 10px;
+    }
+
+    a {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        margin-right: 10px;
+        border-radius: 25px;
+        /* Link Border and Text: Lime Green (Color requested) */
+        border: 2px solid #8BC34A; /* Màu xanh bạn yêu cầu */
+        font-weight: bold;
+        color: #8BC34A; /* Màu xanh bạn yêu cầu */
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        a:hover {
+            /* Hover Background: Lime Green (Color requested) */
+            background-color: #8BC34A; /* Màu xanh bạn yêu cầu */
+            color: white;
+        }
+
+</style>
+<body>
+    <div class="container-box">
+        <h4>Chi tiết hàng hóa</h4>
+        <dl class="row">
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.TenHh)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.TenHh)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.TenAlias)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.TenAlias)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.SoLuongTonKho)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.SoLuongTonKho)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.DonGia)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.DonGia)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Hinh)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Hinh)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.NgaySx)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.NgaySx)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.HanSd)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.HanSd)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.MaNcc)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.MaNcc)</dd>
+            @* <dt class="col-sm-2">@Html.DisplayNameFor(model => model.GiamGia)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.GiamGia)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.SoLanXem)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.SoLanXem)</dd> *@
+
+            <div class="form-group">
+                <label asp-for="MaNcc">Nhà cung cấp</label>
+                <select asp-for="MaNcc" class="form-control" asp-items="ViewBag.MaNcc"></select>
+
+                <span asp-validation-for="MaNcc" class="text-danger"></span>
+            </div>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.MoTa)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.MoTa)</dd>
+
+            @* <dt class="col-sm-2">@Html.DisplayNameFor(model => model.MaLoaiNavigation)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.MaLoaiNavigation.MaLoai)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.MaNccNavigation)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.MaNccNavigation.MaNcc)</dd> *@
+        </dl>
+
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.MaHh">✏️ Chỉnh sửa</a>
+            <a asp-action="Index">← Quay lại danh sách</a>
+        </div>
+    </div>
+</body>
+</html>

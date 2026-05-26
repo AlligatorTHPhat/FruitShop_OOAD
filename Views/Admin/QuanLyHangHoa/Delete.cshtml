@@ -1,0 +1,196 @@
+﻿@model FruitShopG4P.Data.HangHoa
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Xóa sản phẩm</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        /* Màu chủ đạo mới: Lime Green */
+        :root {
+            --primary-color: #689f38; /* Green Dark (Màu đậm hơn của #8BC34A) */
+            --primary-light: #8BC34A; /* Lime Green (Màu chủ đạo) */
+            --background-start: #f1f8e9; /* Green Lightest */
+            --background-end: #dcedc8; /* Green Lighter */
+            /* Màu hành động được tinh chỉnh */
+            --delete-start: #ef5350; /* Red Light (Giữ nguyên) */
+            --delete-end: #d32f2f; /* Red Dark (Giữ nguyên) */
+            /* Màu Hủy: Xanh Xám */
+            --cancel-start: #78909c; /* Blue Grey Light (Giữ nguyên) */
+            --cancel-end: #546e7a; /* Blue Grey Dark (Giữ nguyên) */
+        }
+
+        body {
+            /* Thay đổi gradient nền sang tông Xanh Lá */
+            background: linear-gradient(120deg, var(--background-start), var(--background-end));
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+        }
+
+        .container-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            /* Màu tiêu đề: Green Dark */
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .warning-message {
+            /* Nền cảnh báo: Green Lightest */
+            background: linear-gradient(45deg, var(--background-start), var(--background-end));
+            /* Viền cảnh báo: Green Dark */
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            /* Chữ cảnh báo: Green Dark */
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #333;
+            width: 150px;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            color: #666;
+            flex: 1;
+        }
+
+        .btn-delete {
+            /* Nút Delete: Red Gradient (Giữ màu đỏ cho hành động xóa) */
+            background: linear-gradient(45deg, var(--delete-start), var(--delete-end));
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-delete:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
+                color: white;
+            }
+
+        /* Nút Cancel/Hủy bỏ được giữ màu Xanh Xám */
+        .btn-cancel {
+            background: linear-gradient(45deg, var(--cancel-start), var(--cancel-end));
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .btn-cancel:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(84, 110, 122, 0.4);
+                color: white;
+                text-decoration: none;
+            }
+
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-box">
+            <h1>⚠️ Xác nhận xóa hàng hóa</h1>
+
+            <div class="warning-message">
+                Bạn có chắc chắn muốn xóa sản phẩm này không?<br />
+                <strong>Hành động này không thể hoàn tác!</strong>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Tên sản phẩm:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.TenHh)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Alias:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.TenAlias)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Số lượng tồn kho</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.SoLuongTonKho)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Đơn giá:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.DonGia)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Hình:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.Hinh)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Ngày sản xuất:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.NgaySx)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Hạn sử dụng:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.HanSd)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Nhà cung cấp</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.MaNcc)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Mô tả:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.MoTa)</div>
+            </div>
+
+            <div class="actions">
+                <form asp-action="Delete" method="post" style="display: inline;">
+                    <input type="hidden" asp-for="MaHh" />
+                    <button type="submit" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                        🗑️ Xóa sản phẩm
+                    </button>
+                </form>
+                <a asp-action="Index"> ❌ Hủy bỏ</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

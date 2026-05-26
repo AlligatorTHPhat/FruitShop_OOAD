@@ -1,0 +1,234 @@
+﻿@model IEnumerable<FruitShopG4P.Data.HangHoa>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị hàng hóa</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        /* Màu chủ đạo mới: Lime Green/Light Green (#8BC34A) */
+        :root {
+            --primary-color: #8BC34A; /* Màu xanh lá chanh chính (màu đậm vừa) */
+            --primary-dark: #689f38; /* Xanh lá cây đậm hơn (cho tiêu đề, hover) */
+            --primary-light: #aed581; /* Xanh lá cây nhạt hơn (cho gradient, hover) */
+            --background-start: #f1f8e9; /* Xanh chanh rất nhạt */
+            --background-end: #c5e1a5; /* Xanh chanh nhạt */
+            /* Màu hành động được giữ nguyên (Info, Warning, Danger) */
+            --info-start: #29b6f6;
+            --info-end: #0288d1;
+            --warning-start: #ffb74d;
+            --warning-end: #f57c00;
+            --danger-start: #ef5350;
+            --danger-end: #d32f2f;
+        }
+
+        body {
+            /* Thay đổi gradient nền sang tông Xanh Lá Chanh */
+            background: linear-gradient(120deg, var(--background-start), var(--background-end));
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+        }
+
+        .container-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            /* Màu tiêu đề: Xanh lá cây đậm */
+            color: var(--primary-dark);
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .btn-create {
+            /* Nút Create: Lime Green Gradient */
+            background: linear-gradient(45deg, var(--primary-light), var(--primary-color));
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-create:hover {
+                transform: translateY(-2px);
+                /* Box shadow dựa trên Primary Color */
+                box-shadow: 0 5px 15px rgba(139, 195, 74, 0.4);
+                color: white;
+                text-decoration: none;
+            }
+
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+
+        thead th {
+            /* Header Table: Lime Green Gradient */
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
+            color: white;
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        tbody td {
+            padding: 12px;
+            vertical-align: middle;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tbody tr:hover {
+            /* Background hover: Xanh chanh rất nhạt */
+            background-color: var(--background-start);
+            transform: scale(1.01);
+            transition: all 0.2s ease;
+        }
+
+        .btn-action {
+            margin: 0 2px;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .btn-info {
+            /* Info/Details Button: Blue Gradient (Được giữ nguyên) */
+            background: linear-gradient(45deg, var(--info-start), var(--info-end));
+            border: none;
+            color: white;
+        }
+
+        .btn-warning {
+            /* Warning/Edit Button: Orange Gradient (Được giữ nguyên) */
+            background: linear-gradient(45deg, var(--warning-start), var(--warning-end));
+            border: none;
+            color: white;
+        }
+
+        .btn-danger {
+            /* Danger/Delete Button: Red Gradient (Được giữ nguyên) */
+            background: linear-gradient(45deg, var(--danger-start), var(--danger-end));
+            border: none;
+            color: white;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .back-link {
+            /* Màu link: Xanh lá cây đậm */
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+            .back-link:hover {
+                color: #558b2f; /* Xanh lá cây đậm hơn nữa */
+                text-decoration: none;
+            }
+    </style>
+</head>
+<body>
+    <div class="container-box">
+        <a href="@Url.Action("IndexNhanVien", "Admin")" class="back-link">← Quay lại</a>
+
+        <h1>Quản trị hàng hóa</h1>
+        <form asp-action="Search" asp-controller="QuanLyHangHoa" method="get" class="mb-3">
+            <div class="input-group" style="max-width: 420px;">
+                <input type="text"
+                       name="query"
+                       class="form-control"
+                       placeholder="Nhập tên hàng hóa cần tìm..."
+                       value="@(ViewBag.Query ?? string.Empty)" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-info" type="submit" style="color: white; background: linear-gradient(45deg, var(--primary-light), var(--primary-color)); border: none;">
+                        <i class="fa fa-search"></i> Tìm
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Hình</th>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Tên Alias</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Ngày SX</th>
+                        <th>Hạn sử dụng</th>
+                        <th>Nhà cung cấp</th>
+                        <th>Mô tả</th>
+                        @* <th>Loại</th>
+                        <th>Nhà cung cấp</th> *@
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.Hinh))
+                                {
+                                    <img src="~/Hinh/HangHoa/@item.Hinh" alt="@item.TenHh" style="width:80px; height:80px; object-fit:cover; border-radius:8px;" />
+                                }
+                                else
+                                {
+                                    <span>Chưa có ảnh</span>
+                                }
+                            </td>
+                            <td>@item.TenHh</td>
+                            <td>@item.TenAlias</td>
+                            <td>@item.SoLuongTonKho</td>
+                            <td>@item.DonGia</td>
+                            <td>@item.NgaySx.ToString("dd/MM/yyyy")</td>
+                            <td>@(item.HanSd?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+                            <td>@item.MaNcc</td>
+                            <td>@item.MoTa</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.MaHh" class="btn-action btn-warning">Sửa</a>
+                                <a asp-action="Details" asp-route-id="@item.MaHh" class="btn-action btn-info">Chi tiết</a>
+                                <a asp-action="Delete" asp-route-id="@item.MaHh" class="btn-action btn-danger">Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</body>
+</html>

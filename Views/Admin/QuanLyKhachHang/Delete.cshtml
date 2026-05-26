@@ -1,0 +1,208 @@
+﻿@model FruitShopG4P.Data.KhachHang
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>Xóa khách hàng</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        /* Màu chủ đạo phụ: Yellow/Amber (#ffc107) */
+        :root {
+            --delete-color: #d32f2f; /* Red Dark */
+            --delete-light: #ef5350; /* Red Medium */
+            --delete-bg-start: #ffebee; /* Red Lightest */
+            --delete-bg-end: #ffcdd2; /* Red Lighter */
+
+            --primary-color: #ffc107; /* Amber Light (Hủy) */
+            --primary-dark: #ffa000; /* Amber Medium (Hủy Hover) */
+        }
+
+        body {
+            /* Giữ nền Đỏ nhạt để nhấn mạnh cảnh báo */
+            background: linear-gradient(120deg, var(--delete-bg-start), var(--delete-bg-end));
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+        }
+
+        .container-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            /* Tiêu đề: Đỏ */
+            color: var(--delete-color);
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .warning-message {
+            /* Thông báo: Đỏ */
+            background: linear-gradient(45deg, var(--delete-bg-start), var(--delete-bg-end));
+            border: 2px solid var(--delete-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--delete-color);
+            font-weight: bold;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #333;
+            width: 150px;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            color: #666;
+            flex: 1;
+        }
+
+        .btn-delete {
+            /* Nút Xóa: Đỏ Gradient (Giữ nguyên) */
+            background: linear-gradient(45deg, var(--delete-light), var(--delete-color));
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-delete:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
+                color: white;
+            }
+
+        .btn-cancel {
+            /* Nút Hủy: Amber/Orange Gradient */
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .btn-cancel:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 160, 0, 0.4); /* Amber Shadow */
+                color: white;
+                text-decoration: none;
+            }
+
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Gender badges giữ nguyên */
+        .gender-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .gender-male {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .gender-female {
+            background-color: #fce4ec;
+            color: #c2185b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-box">
+            <h1>⚠️ Xác nhận xóa khách hàng</h1>
+
+            <!-- Include Toast Notification -->
+            @await Html.PartialAsync("_ToastNotification")
+
+            <div class="warning-message">
+                Bạn có chắc chắn muốn xóa khách hàng này không?<br>
+                <strong>Hành động này không thể hoàn tác!</strong>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Mã khách hàng:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.MaKh)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Họ tên:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.HoTenKh)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Email:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.EmailKh)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Điện thoại:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.DienThoaiKh)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Giới tính:</div>
+                <div class="detail-value">
+                    <span class="gender-badge @(Model.GioiTinhKh ? "gender-male" : "gender-female")">
+                        @(Model.GioiTinhKh ? "Nam" : "Nữ")
+                    </span>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Ngày sinh:</div>
+                <div class="detail-value">@Model.NgaySinhKh.ToString("dd/MM/yyyy")</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Địa chỉ:</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.DiaChiKh)</div>
+            </div>
+
+            <div class="actions">
+                <form asp-action="Delete" method="post" style="display: inline;">
+                    <input type="hidden" asp-for="MaKh" />
+                    <button type="submit" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?')">
+                        🗑️ Xóa khách hàng
+                    </button>
+                </form>
+                <a href="@Url.Action("Index", "QuanLyKhachHang")" class="btn-cancel">❌ Hủy bỏ</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

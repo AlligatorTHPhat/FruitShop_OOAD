@@ -1,0 +1,138 @@
+﻿@model IEnumerable<FruitShopG4P.ViewModels.CartItem>
+@{
+    ViewData["Title"] = "Checkout";
+    var subtotal = Model.Sum(p => p.ThanhTien);
+    var shipping = 10000;
+    var total = subtotal + shipping;
+}
+
+<div class="container py-5">
+    <h1 class="mb-4">Billing Details</h1>
+
+    <form asp-action="Checkout" asp-controller="Cart" method="post">
+        @Html.AntiForgeryToken()
+        <div class="row g-5">
+            <!-- Thông tin giao hàng -->
+            <div class="col-lg-7">
+                <div class="form-check mb-3">
+                    <input type="checkbox" name="GiongKhachHang" class="form-check-input" id="GiongKhachHang" value="true">
+                    <label class="form-check-label" for="GiongKhachHang">Giống thông tin khách hàng?</label>
+                </div>
+
+                <div class="delivery-info">
+                    <div class="mb-3">
+                        <label class="form-label">Người nhận hàng <sup>*</sup></label>
+                        <input type="text" name="HoTen" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ nhận hàng <sup>*</sup></label>
+                        <input type="text" name="DiaChi" class="form-control" placeholder="123 Lê Lợi">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Điện thoại <sup>*</sup></label>
+                        <input type="text" name="DienThoai" class="form-control">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ghi chú</label>
+                    <textarea name="GhiChu" class="form-control" rows="5" placeholder="Ghi chú..."></textarea>
+                </div>
+            </div>
+
+            <!-- Tóm tắt đơn hàng -->
+            <div class="col-lg-5">
+                <div class="table-responsive mb-4">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ảnh</th>
+                                <th>Tên Sản Phẩm</th>
+                                <th>Giá</th>
+                                <th>SL</th>
+                                <th>Tổng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <img src="@Url.Content("~/Hinh/HangHoa/" + item.Hinh)"
+                                             class="img-fluid rounded" style="width:60px;height:60px;" alt="@item.TenHH">
+                                    </td>
+                                    <td>@item.TenHH</td>
+                                    <td>$@item.DonGia</td>
+                                    <td>@item.SoLuong</td>
+                                    <td>$@item.ThanhTien</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="4" class="text-end fw-bold">Thành tiền</td>
+                                <td>$@subtotal.ToString("#,##0")</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end fw-bold">Tiền ship</td>
+                                <td>$@shipping.ToString("#,##0")</td>
+                            </tr>
+                            <tr class="table-light">
+                                <td colspan="4" class="text-end fw-bold text-uppercase">Tổng tiền</td>
+                                <td class="fw-bold text-danger">$@total.ToString("#,##0")</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Phương thức thanh toán -->
+                @* <div class="mb-3">
+                    <label class="form-label fw-bold">Phương thức thanh toán</label>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="PaymentMethod" value="Bank">
+                        <label class="form-check-label">Chuyển khoản ngân hàng</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="PaymentMethod" value="COD">
+                        <label class="form-check-label">Thanh toán khi nhận hàng</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="PaymentMethod" value="Paypal">
+                        <label class="form-check-label">PayPal</label>
+                    </div>
+                </div> *@
+
+                <!-- Nút đặt hàng -->
+                <button type="submit" class="btn btn-primary w-100 mb-3">Thanh toán trực tiếp khi nhận hàng</button>
+
+                <!-- PayPal button -->
+                <div id="paypal-button-container"></div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.PaypalClientId"></script>
+    <script>
+        $(function () {
+            $("#GiongKhachHang").change(function () {
+                $(".delivery-info").toggleClass("d-none", $(this).is(":checked"));
+            });
+
+            paypal.Buttons({
+                style: { color: 'silver', layout: 'vertical' },
+                createOrder: () => {
+                    return fetch("/Cart/create-paypal-order", { method: "post" })
+                        .then(res => res.ok ? res.json() : res.json().then(err => { throw err; }))
+                        .then(order => order.id)
+                        .catch(err => alert(err.message));
+                },
+                onApprove: (data) => {
+                    return fetch(`/Cart/capture-paypal-order?orderId=${data.orderID}`, { method: "post" })
+                        .then(res => res.ok ? res.json() : res.json().then(err => { throw err; }))
+                        .then(() => window.location.href = "/Cart/Success")
+                        .catch(err => alert(err.message));
+                }
+            }).render('#paypal-button-container');
+        });
+    </script>
+}

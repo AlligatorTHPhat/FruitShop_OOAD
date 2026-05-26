@@ -1,0 +1,79 @@
+using ECommerceMVC.Helpers;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using FruitShopG4P.Data;
+using FruitShopG4P.Helpers;
+using FruitShopG4P.ViewModels;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<MyUlti>();
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddDbContext<FruitShopContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("FruitShop"));
+});
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(5);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "KhachHang";
+    options.DefaultChallengeScheme = "KhachHang";
+})
+.AddCookie("KhachHang", options =>
+{
+    options.LoginPath = "/KhachHang/DangNhap";
+    options.AccessDeniedPath = "/KhachHang/AccessDenied";
+    options.Cookie.Name = "KhachHangCookie";
+})
+.AddCookie("AdminCookie", options =>
+{
+    options.LoginPath = "/Admin/DangNhap/Index";
+    options.AccessDeniedPath = "/Admin/DangNhap/AccessDenied";
+    options.Cookie.Name = "AdminCookie";
+});
+
+// Register Paypal type Singleton() - just have one instance
+builder.Services.AddSingleton(x => new PaypalClient(
+    builder.Configuration["PaypalOptions:AppId"],
+    builder.Configuration["PaypalOptions:AppSecret"],
+    builder.Configuration["PaypalOptions:Mode"]
+));
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseSession();
+
+app.UseAuthorization();
+app.UseAuthorization();
+app.UseDeveloperExceptionPage();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();

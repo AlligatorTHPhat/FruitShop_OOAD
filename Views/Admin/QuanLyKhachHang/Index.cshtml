@@ -1,0 +1,281 @@
+﻿@model IEnumerable<FruitShopG4P.Data.KhachHang>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>Quản lý khách hàng</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        /* Màu chủ đạo: Yellow/Amber (#ffc107) */
+        :root {
+            --primary-color: #ffc107; /* Amber Light (Chính) */
+            --primary-dark: #ffa000; /* Amber Medium (Đậm hơn) */
+            --primary-darker: #ff8f00; /* Amber Dark (Tiêu đề, gradient đậm) */
+            --background-start: #fff8e1; /* Yellow Lightest */
+            --background-end: #ffecb3; /* Yellow Lighter */
+            /* Giữ màu phụ cho các nút hành động (Info, Warning, Danger) */
+            --info-start: #29b6f6;
+            --info-end: #0288d1;
+            --warning-start: #ffb74d;
+            --warning-end: #f57c00;
+            --danger-start: #ef5350;
+            --danger-end: #d32f2f;
+        }
+
+        body {
+            /* Background: Tông Vàng/Hổ Phách */
+            background: linear-gradient(135deg, var(--background-start), var(--background-end));
+            font-family: 'Segoe UI', sans-serif;
+            padding: 30px;
+        }
+
+        .container-box {
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            /* Màu tiêu đề: Amber Darker */
+            color: var(--primary-darker);
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .back-link {
+            /* Màu link: Amber Medium */
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 18px;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+            .back-link:hover {
+                /* Hover link: Amber Darker */
+                color: var(--primary-darker);
+            }
+
+        .btn-create {
+            /* Nút Create: Yellow/Amber Gradient */
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-darker));
+            border: none;
+            color: #333; /* Màu chữ đen hoặc xám đậm để nổi bật trên nền vàng */
+            padding: 12px 26px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-create:hover {
+                transform: translateY(-2px);
+                /* Box Shadow: Amber Shadow */
+                box-shadow: 0 6px 18px rgba(255, 193, 7, 0.4);
+                color: #333;
+            }
+
+        .table {
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+        }
+
+            .table thead th {
+                /* Header Table: Amber Dark Gradient */
+                background: linear-gradient(45deg, var(--primary-darker), var(--primary-dark));
+                color: white; /* Giữ màu chữ trắng */
+                border: none;
+                padding: 14px;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 13px;
+            }
+
+            .table tbody td {
+                padding: 14px;
+                vertical-align: middle;
+                border-bottom: 1px solid #f0f0f0;
+                font-size: 14px;
+            }
+
+            .table tbody tr:hover {
+                /* Hover Table: Yellow Lightest */
+                background-color: var(--background-start);
+                transition: all 0.2s ease;
+            }
+
+        .btn-action {
+            margin: 0 2px;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-info {
+            /* Info/Details Button: Giữ Blue (Xanh dương) */
+            background: linear-gradient(45deg, #29b6f6, #0288d1);
+            color: white;
+        }
+
+        .btn-warning {
+            /* Warning/Edit Button: Giữ Orange (Cam) */
+            background: linear-gradient(45deg, #ffb74d, #fb8c00);
+            color: white;
+        }
+
+        .btn-danger {
+            /* Danger/Delete Button: Giữ Red (Đỏ) */
+            background: linear-gradient(45deg, #ef5350, #c62828);
+            color: white;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Gender badge (Nếu Khách hàng có giới tính) */
+        .gender-badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .gender-male {
+            /* Male: Blue (Giữ tông xanh dương) */
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .gender-female {
+            /* Female: Pink (Giữ tông hồng) */
+            background-color: #fce4ec;
+            color: #c2185b;
+        }
+
+        .customer-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            /* Viền Avatar: Amber Medium */
+            border: 2px solid var(--primary-dark);
+        }
+
+        /* Search box styling */
+        .input-group {
+            margin-bottom: 20px;
+            max-width: 400px;
+        }
+
+            .input-group .form-control {
+                border-radius: 25px 0 0 25px;
+                /* Viền Input: Amber Light */
+                border: 1px solid var(--primary-light);
+                padding-left: 15px;
+            }
+
+            .input-group .btn {
+                border-radius: 0 25px 25px 0;
+                /* Nút Tìm kiếm: Amber Gradient */
+                background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+                color: white;
+                border: none;
+            }
+
+                .input-group .btn:hover {
+                    /* Hover Nút Tìm kiếm: Amber Darker Gradient */
+                    background: linear-gradient(45deg, var(--primary-dark), var(--primary-darker));
+                }
+    </style>
+</head>
+<div class="container-fluid">
+    <div class="container-box">
+        <a href="@Url.Action("IndexAdmin", "Admin")" class="back-link">← Quay lại trang Admin</a>
+
+        <h1>Quản trị khách hàng</h1>
+        <form asp-action="Search" asp-controller="QuanLyKhachHang" method="get">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for customers" name="query">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!-- Include Toast Notification -->
+        @await Html.PartialAsync("_ToastNotification")
+
+        @*<a href="@Url.Action("Create", "QuanLyKhachHang", new { area = "" })" class="btn-create">
+            + Thêm khách hàng mới
+        </a>*@
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Mã KH</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Điện thoại</th>
+                        <th>Giới tính</th>
+                        <th>Ngày sinh</th>
+                        <th>Địa chỉ</th>
+                        <th style="width: 220px; text-align: center;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td style="text-align: center;">
+                                @{
+                                    var imageSrc = !string.IsNullOrEmpty(item.HinhKh) ?
+                                    "~/Hinh/KhachHang/" + item.HinhKh :
+                                    "~/Hinh/default-customer.jpg";
+                                }
+                                <img src="@Url.Content(imageSrc)" alt="Avatar" class="customer-avatar" />
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.MaKh)</td>
+                            <td>@Html.DisplayFor(modelItem => item.HoTenKh)</td>
+                            <td>@Html.DisplayFor(modelItem => item.EmailKh)</td>
+                            <td>@Html.DisplayFor(modelItem => item.DienThoaiKh)</td>
+                            <td>
+                                <span class="gender-badge @(item.GioiTinhKh ? "gender-male" : "gender-female")">
+                                    @(item.GioiTinhKh ? "Nam" : "Nữ")
+                                </span>
+                            </td>
+                            <td>@item.NgaySinhKh.ToString("dd/MM/yyyy")</td>
+                            <td>@Html.DisplayFor(modelItem => item.DiaChiKh)</td>
+                            <td style="text-align: center; white-space: nowrap;">
+                                <a href="@Url.Action("Details", "QuanLyKhachHang", new { id = item.MaKh })" class="btn-action btn-info">Chi tiết</a>
+                                <a href="@Url.Action("Edit", "QuanLyKhachHang", new { id = item.MaKh })" class="btn-action btn-warning">Sửa</a>
+                                <a href="@Url.Action("Delete", "QuanLyKhachHang", new { id = item.MaKh })" class="btn-action btn-danger">Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,195 @@
+﻿@model FruitShopG4P.Data.HangHoa
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thêm sản phẩm mới</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <style>
+        body {
+            /* Tông nền Xanh Lá Nhạt */
+            background: linear-gradient(120deg, #f1f8e9, #dcedc8); /* Màu xanh nhạt hơn, hài hòa với #8BC34A */
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+        }
+
+        .container-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            /* Màu tiêu đề: Vibrant Lime Green (#8BC34A) */
+            color: #689f38; /* Xanh lá đậm hơn để dễ đọc */
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            /* Viền Xanh Lá Nhạt */
+            border: 2px solid #e6ee9c;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus {
+                /* Viền/Shadow khi focus: Vibrant Lime Green (#8BC34A) */
+                border-color: #8BC34A;
+                box-shadow: 0 0 10px rgba(139, 195, 74, 0.5);
+            }
+
+        .btn-submit {
+            /* Nút Submit: Lime Green Gradient */
+            background: linear-gradient(45deg, #aed581, #8BC34A);
+            border: none;
+            color: #1f2937; /* Đổi màu chữ sang tối để dễ đọc trên nền sáng */
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-submit:hover {
+                transform: translateY(-2px);
+                /* Box shadow dựa trên Lime Green */
+                box-shadow: 0 5px 15px rgba(139, 195, 74, 0.6);
+                color: #1f2937;
+            }
+
+        .text-danger {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .back-link {
+            /* Màu link: Vibrant Lime Green (#8BC34A) */
+            color: #8BC34A;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+            .back-link:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-box">
+            <a asp-controller="Admin" asp-action="IndexAdmin">← Quay lại danh sách</a>
+            <h1>Nhập thêm hàng hóa mới</h1>
+
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-group">
+                    <label asp-for="Hinh"></label>
+                    <br />
+                    <img id="imagePreview" src="~/Hinh/HangHoa/default.png" alt="Preview"
+                         style="width:150px; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;" />
+                    <input asp-for="Hinh" type="file" class="form-control" id="imageUpload" accept="image/*" onchange="previewImage(this)" />
+                    <small class="text-muted">Chọn ảnh sản phẩm</small>
+                    <span asp-validation-for="Hinh" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TenHh"></label>
+                    <input asp-for="TenHh" class="form-control" />
+                    <span asp-validation-for="TenHh" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TenAlias"></label>
+                    <input asp-for="TenAlias" class="form-control" />
+                    <span asp-validation-for="TenAlias" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DonGia"></label>
+                    <input asp-for="DonGia" class="form-control" />
+                    <span asp-validation-for="DonGia" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="NgaySx"></label>
+                    <input asp-for="NgaySx" type="date" class="form-control" id="NgaySx" />
+                    <span asp-validation-for="NgaySx" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="HanSd"></label>
+                    <input asp-for="HanSd" type="date" class="form-control" id="HanSd" />
+                    <span asp-validation-for="HanSd" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="MaNcc"></label>
+                    <input asp-for="MaNcc" class="form-control" />
+                    <span asp-validation-for="MaNcc" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="MaLoai"></label>
+                    <input asp-for="MaLoai" class="form-control" />
+                    <span asp-validation-for="MaLoai" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="MoTa"></label>
+                    <input asp-for="MoTa" class="form-control" />
+                    <span asp-validation-for="MoTa" class="text-danger"></span>
+                </div>
+
+                <input type="hidden" asp-for="GiamGia" value="0" />
+                <input type="hidden" asp-for="SoLanXem" value="0" />
+
+                <div class="text-center">
+                    <button type="submit" class="btn-submit">Thêm sản phẩm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            function previewImage(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('imagePreview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        </script>
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>

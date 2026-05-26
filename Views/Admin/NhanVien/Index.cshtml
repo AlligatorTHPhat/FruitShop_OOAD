@@ -1,0 +1,201 @@
+﻿@model IEnumerable<FruitShopG4P.Data.NhanVien>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>Quản lý nhân viên</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            /* Light Blue Background Gradient */
+            background: linear-gradient(120deg, #e3f2fd, #bbdefb);
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+        }
+
+        .container-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            /* Deep Blue Text */
+            color: #0d47a1;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .btn-create {
+            /* Blue Gradient for Create Button */
+            background: linear-gradient(45deg, #42a5f5, #0d47a1);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-create:hover {
+                transform: translateY(-2px);
+                /* Blue Shadow */
+                box-shadow: 0 5px 15px rgba(13, 71, 161, 0.4);
+                color: white;
+                text-decoration: none;
+            }
+
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+            .table thead th {
+                /* Blue Gradient for Table Header */
+                background: linear-gradient(45deg, #0d47a1, #42a5f5);
+                color: white;
+                border: none;
+                padding: 15px;
+                font-weight: 600;
+            }
+
+            .table tbody td {
+                padding: 15px;
+                vertical-align: middle;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .table tbody tr:hover {
+                /* Very Light Blue Hover Background */
+                background-color: #e3f2fd;
+                transform: scale(1.01);
+                transition: all 0.2s ease;
+            }
+
+        .btn-action {
+            margin: 0 2px;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .btn-info {
+            /* Already Blue - kept as is */
+            background: linear-gradient(45deg, #29b6f6, #0288d1);
+            border: none;
+            color: white;
+        }
+
+        .btn-warning {
+            /* Blue Gradient for Edit/Warning (Matches primary theme) */
+            background: linear-gradient(45deg, #42a5f5, #0d47a1);
+            border: none;
+            color: white;
+        }
+
+        .btn-danger {
+            /* Darker Red Gradient for Delete (Kept Red for destructive action distinction) */
+            background: linear-gradient(45deg, #ef5350, #d32f2f);
+            border: none;
+            color: white;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .back-link {
+            /* Deep Blue Link Color */
+            color: #0d47a1;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+            .back-link:hover {
+                color: #1565c0;
+                text-decoration: none;
+            }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="container-box">
+            <a href="@Url.Action("IndexAdmin", "Admin")" class="back-link">← Quay lại trang Admin</a>
+
+            <h1>Quản trị nhân viên</h1>
+            <form asp-action="Search" asp-controller="NhanVien" method="get" class="form-inline mb-3" style="gap: 8px;">
+                <input type="text" name="query" class="form-control rounded-pill px-3"
+                                   placeholder="🔍 Tìm kiếm nhân viên..." style="flex: 1; min-width: 250px;" />
+
+                <button type="submit" class="btn btn-warning rounded-pill px-4" style="font-weight: bold;">
+                    <i class="fas fa-search"></i> Tìm kiếm
+                </button>
+            </form>
+
+            <a href="@Url.Action("Create", "NhanVien")" class="btn-create">
+                + Thêm nhân viên mới
+            </a>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã NV</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Mật khẩu</th>
+                            <th style="width: 200px; text-align: center;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.MaNv</td>
+                                <td>@item.HoTenNv</td>
+                                <td>@item.EmailNv</td>
+                                <td>@item.MatKhauNv</td>
+                                <td style="text-align: center; white-space: nowrap;">
+                                    <a href="@Url.Action("Details", "NhanVien", new { id = item.MaNv })" class="btn-action btn-info">Chi tiết</a>
+                                    <a href="@Url.Action("Edit", "NhanVien", new { id = item.MaNv })" class="btn-action btn-warning">Sửa</a>
+
+                                    @if (item.MaNv != "AD001")
+                                    {
+                                        <a href="@Url.Action("Delete", "NhanVien", new { id = item.MaNv })" class="btn-action btn-danger">Xóa</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

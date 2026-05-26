@@ -1,0 +1,207 @@
+﻿@model FruitShopG4P.Data.HoaDon
+
+@{
+    Layout = null;
+}
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+    <style>
+        /* Màu chủ đạo: Amber/Orange (#ff9800) */
+        :root {
+            --primary-color: #ff9800; /* Amber Medium */
+            --primary-dark: #f57c00; /* Amber Dark */
+            --primary-light: #ffb74d; /* Amber Light */
+            --primary-lightest: #fff8e1; /* Amber Very Light */
+        }
+
+        body {
+            /* Nền: Tông Cam/Vàng nhạt */
+            background: #fff8e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-box {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h4 {
+            /* Tiêu đề: Amber Dark */
+            text-align: center;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            /* Đường kẻ ngang: Amber Gradient */
+            background: linear-gradient(to right, #ffecb3, var(--primary-light));
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            /* Nhãn: Amber Dark */
+            font-weight: bold;
+            color: var(--primary-dark);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            /* Viền: Amber Lightest */
+            border: 1px solid #ffecb3;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+            transition: all 0.25s ease;
+        }
+
+            .form-control:focus {
+                /* Viền Focus: Amber Medium */
+                border-color: var(--primary-color);
+                /* Box Shadow Focus: Amber Shadow */
+                box-shadow: 0 0 8px rgba(255, 152, 0, 0.3);
+                outline: none;
+            }
+
+        .text-danger {
+            color: #d32f2f; /* Giữ màu đỏ cho lỗi */
+            font-size: 12px;
+        }
+
+        .btn-primary {
+            /* Nút Gửi: Amber Gradient */
+            background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                /* Hover Nút: Darker Amber Gradient */
+                background: linear-gradient(to right, #fb8c00, var(--primary-dark));
+            }
+
+        a {
+            text-decoration: none;
+            /* Link: Amber Dark */
+            color: var(--primary-dark);
+            font-weight: bold;
+            transition: color 0.2s ease;
+        }
+
+            a:hover {
+                /* Hover Link: Amber Darker */
+                color: #e65100;
+            }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-box">
+        <h4>Cập nhật trạng thái hóa đơn</h4>
+        <hr />
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MaHd" />
+
+            @*<div class="form-group">
+                 <label>Khách hàng</label>
+                <input type="text" class="form-control" value="@ViewBag.TenKhachHang" readonly /> 
+                <input type="hidden" asp-for="MaKh" readonly/>
+            </div>
+
+            <div class="form-group">
+                <label>Ngày đặt</label>
+                <input asp-for="NgayDat" type="date" class="form-control" readonly />
+                <span asp-validation-for="NgayDat" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Ngày giao</label>
+                <input asp-for="NgayGiao" type="date" class="form-control" readonly />
+                <span asp-validation-for="NgayGiao" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Người nhận</label>
+                <input asp-for="HoTenNguoiNhan" class="form-control" readonly />
+                <span asp-validation-for="HoTenNguoiNhan" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Địa chỉ</label>
+                <input asp-for="DiaChi" class="form-control" readonly />
+                <span asp-validation-for="DiaChi" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Cách thanh toán</label>
+                <input asp-for="CachThanhToan" class="form-control" readonly />
+                <span asp-validation-for="CachThanhToan" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Cách vận chuyển</label>
+                <input asp-for="CachVanChuyen" class="form-control" readonly />
+                <span asp-validation-for="CachVanChuyen" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Phí vận chuyển</label>
+                <input asp-for="PhiVanChuyen" type="number" step="0.01" class="form-control" readonly />
+                <span asp-validation-for="PhiVanChuyen" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Nhân viên</label>
+                <input type="text" class="form-control" value="@ViewBag.TenNhanVien" readonly />
+                <input type="hidden" asp-for="MaNv" />
+            </div>*@
+
+            <div class="form-group">
+                <label>Trạng thái</label>
+                <select asp-for="MaTrangThai" class="form-control">
+                    <option value="1" selected="@(Model.MaTrangThai == 1)">Chưa xác nhận</option>
+                    <option value="2" selected="@(Model.MaTrangThai == 2)">Đã xác nhận</option>
+                </select>
+                <span asp-validation-for="MaTrangThai" class="text-danger"></span>
+            </div>
+
+            @*<div class="form-group">
+                <label>Ghi chú</label>
+                <input asp-for="GhiChu" class="form-control" />
+                <span asp-validation-for="GhiChu" class="text-danger"></span>
+            </div>*@
+
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn-primary" />
+            </div>
+        </form>
+
+        <div class="back-link">
+            <a asp-action="Index">← Quay lại</a>
+        </div>
+    </div>
+</body>

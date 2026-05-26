@@ -1,0 +1,242 @@
+﻿@model FruitShopG4P.Data.NhanVien
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Chỉnh sửa nhân viên";
+
+    // Giả định Model.HinhNv đã được sửa lỗi và tồn tại
+    @*var imageSrc = !string.IsNullOrEmpty(Model.HinhNv)
+        ? Url.Content("~/Hinh/NhanVien/" + Model.HinhNv)
+        : Url.Content("~/Hinh/default-avatar.jpg");*@
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            /* Nền: Xanh lá cây rất nhạt (Fruit Shop Theme) */
+            background: linear-gradient(135deg, #e6ffe6, #f0fff0);
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+        }
+
+        .container-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            /* Màu tiêu đề: Xanh lá cây tươi */
+            color: #059669;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Quay lại danh sách màu xanh lá cây */
+        .back-link {
+            color: #059669 !important;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            /* Viền xanh lá cây nhạt */
+            border: 2px solid #d1fae5;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: 0.3s ease;
+        }
+
+            .form-control:focus {
+                /* Viền nhấn xanh lá cây tươi */
+                border-color: #059669;
+                box-shadow: 0 0 10px rgba(5, 150, 105, 0.3);
+            }
+
+        .btn-submit {
+            /* Gradient Xanh lá cây */
+            background: linear-gradient(45deg, #34d399, #059669);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            width: 100%;
+            padding: 12px;
+            transition: 0.3s;
+        }
+
+            .btn-submit:hover {
+                transform: translateY(-2px);
+                /* Bóng đổ xanh lá cây */
+                box-shadow: 0 5px 15px rgba(5, 150, 105, 0.4);
+            }
+
+        .image-upload-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            /* Viền: Vàng cam nổi bật */
+            border: 3px solid #facc15;
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            /* Gradient Vàng cam */
+            background: linear-gradient(45deg, #facc15, #fbbf24);
+            color: #1f2937; /* Chữ đậm */
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+            .upload-btn:hover {
+                transform: translateY(-2px);
+                /* Bóng đổ vàng cam */
+                box-shadow: 0 5px 15px rgba(250, 202, 21, 0.4);
+            }
+
+        #imageUpload {
+            display: none;
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            font-size: 16px;
+        }
+
+            .password-toggle:hover {
+                /* Màu toggle xanh lá cây tươi */
+                color: #059669;
+            }
+
+        .text-danger {
+            font-size: 14px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            padding: 12px 15px;
+            border: 2px solid #d1fae5;
+            border-radius: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-box">
+            <h1>Chi tiết nhân viên</h1>
+
+            @* Thêm thông báo nếu có *@
+            @await Html.PartialAsync("_ToastNotification")
+
+            @* <div class="image-section">
+                @{
+                    var imageSrc = !string.IsNullOrEmpty(Model.HinhNv)
+                    ? "~/Hinh/NhanVien/" + Model.HinhNv
+                    : "~/Hinh/default-employee.jpg";
+                }
+                <img src="@Url.Content(imageSrc)" alt="Ảnh nhân viên" class="employee-image" />
+            </div> *@
+
+            <div class="detail-row">
+                <div class="detail-label">Mã nhân viên:</div>
+                <div class="detail-value">@Model.MaNv</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Họ tên:</div>
+                <div class="detail-value">@Model.HoTenNv</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Email:</div>
+                <div class="detail-value">@Model.EmailNv</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Mật khẩu:</div>
+                <div class="detail-value">@Model.MatKhauNv</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Ngày sinh:</div>
+                <div class="detail-value">@Model.NgaySinhNv.ToString("dd/MM/yyyy")</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Giới tính:</div>
+                <div class="detail-value">
+                    <span class="gender-badge @(Model.GioiTinhNv == true ? "gender-male" : "gender-female")">
+                        @(Model.GioiTinhNv == true ? "Nam" : "Nữ")
+                    </span>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Địa chỉ:</div>
+                <div class="detail-value">@Model.DiaChiNv</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DienThoaiNv">Điện Thoại</label>
+                <input asp-for="DienThoaiNv" class="form-control" />
+            </div>
+
+            @* Thêm phòng ban nếu cần *@
+            @*<div class="detail-row">
+                <div class="detail-label">Phòng ban:</div>
+                <div class="detail-value">@Model.TenPhongBan</div>
+            </div>*@
+
+            <div class="actions">
+                <a href="@Url.Action("Index", "NhanVien")" class="back-link">← Quay lại danh sách</a>
+                <a href="@Url.Action("Edit", "NhanVien", new { id = Model.MaNv })" class="edit-link">✏️ Chỉnh sửa</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

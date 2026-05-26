@@ -1,0 +1,146 @@
+﻿@model FruitShopG4P.Data.HoaDon
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Chi tiết Hóa Đơn</title>
+    <style>
+        /* Màu chủ đạo: Amber/Orange (#ff9800) */
+        :root {
+            --primary-color: #ff9800; /* Amber Medium */
+            --primary-dark: #f57c00; /* Amber Dark */
+            --primary-lightest: #fff3e0; /* Orange Lightest */
+            --background-start: #fff3e0; /* Orange Lightest */
+            --background-end: #ffe0b2; /* Orange Lighter */
+        }
+
+        body {
+            /* Gradient Nền: Tông Cam/Vàng */
+            background: linear-gradient(120deg, var(--background-start), var(--background-end));
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+        }
+
+        h4 {
+            /* Màu Tiêu đề: Amber Dark */
+            color: var(--primary-dark);
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .details-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        dl.row {
+            margin: 0;
+        }
+
+        dt {
+            /* Màu Nhãn (Label): Amber Dark */
+            font-weight: bold;
+            color: var(--primary-dark);
+            padding: 8px 0;
+        }
+
+        dd {
+            color: #333;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+            dd:last-child {
+                border-bottom: none;
+            }
+
+        .btn-action {
+            display: inline-block;
+            margin-top: 20px;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            /* Nút Hành động Chính: Orange Gradient */
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+            color: white;
+        }
+
+            .btn-action:hover {
+                transform: translateY(-2px);
+                /* Box Shadow: Amber Shadow */
+                box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+            }
+
+        .btn-back {
+            /* Nút Back (giữ cùng tông màu nhưng gradient hơi khác) */
+            background: linear-gradient(45deg, var(--primary-lightest), var(--primary-color));
+            color: var(--primary-dark); /* Đổi màu chữ sang Cam đậm */
+            border: 2px solid var(--primary-color);
+            padding: 8px 18px; /* Giảm padding cho nút back */
+        }
+
+            .btn-back:hover {
+                /* Hover cho nút Back */
+                background: var(--primary-color);
+                color: white;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="details-container">
+        <h4>Chi tiết hóa đơn</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">Ngày đặt hàng</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.NgayDat)</dd>
+
+            <dt class="col-sm-4">Ngày giao hàng</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.NgayGiao)</dd>
+
+            <dt class="col-sm-4">Họ tên người nhận</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.HoTenNguoiNhan)</dd>
+
+            <dt class="col-sm-4">Địa chỉ giao hàng</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.DiaChi)</dd>
+
+            <dt class="col-sm-4">Hình thức thanh toán</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.CachThanhToan)</dd>
+
+            <dt class="col-sm-4">Hình thức vận chuyển</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.CachVanChuyen)</dd>
+
+            <dt class="col-sm-4">Phí vận chuyển</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.PhiVanChuyen)</dd>
+
+            <dt class="col-sm-4">Ghi chú</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.GhiChu)</dd>
+
+            <dt class="col-sm-4">Mã khách hàng</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.MaKhNavigation.MaKh)</dd>
+
+            <dt class="col-sm-4">Trạng thái đơn hàng</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.MaTrangThaiNavigation.MaTrangThai)</dd>
+        </dl>
+
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.MaHd" class="btn-action">Sửa</a>
+            <a asp-action="Index" class="btn-action btn-back">Quay lại</a>
+        </div>
+    </div>
+
+</body>
+</html>

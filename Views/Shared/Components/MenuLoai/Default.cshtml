@@ -1,0 +1,21 @@
+﻿@model IEnumerable<FruitShopG4P.ViewModels.MenuLoaiVM>
+@{
+    ViewData["Title"] = "Default";
+}
+
+<div class="col-lg-3">
+    <div class="row g-4">
+        <div class="col-lg-12">
+            <div class="mb-3">
+                <h4>Categories</h4>
+                @foreach (var item in Model)
+                {
+                    <div class="d-flex justify-content-between fruite-name">
+                        <a href="#"><i class="fas fa-apple-alt me-2"></i>@item.TenLoai</a>
+                        <span>@item.SoLuong</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
